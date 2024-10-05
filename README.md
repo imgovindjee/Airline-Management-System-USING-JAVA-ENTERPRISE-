@@ -1,11 +1,11 @@
+### Login Details
 ```
 username:- ganesh
 password:- 12345
 ```
-
-
-### OR
-
+```
+OR
+```
 ```
 username:- admin
 password:- admin
