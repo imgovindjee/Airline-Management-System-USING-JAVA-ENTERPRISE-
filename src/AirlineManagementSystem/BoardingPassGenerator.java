@@ -172,7 +172,7 @@ public class BoardingPassGenerator extends JFrame implements ActionListener {
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-        } else {
+        } else if(e.getSource() == printBookingPass_jbutton) {
             String pnr = pnr_number_jtextField.getText();
 
             JTable jTable = new JTable();
