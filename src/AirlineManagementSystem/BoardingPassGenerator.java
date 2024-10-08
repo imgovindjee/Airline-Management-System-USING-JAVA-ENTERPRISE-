@@ -1,5 +1,7 @@
 package AirlineManagementSystem;
 
+import net.proteanit.sql.DbUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +10,7 @@ import java.sql.ResultSet;
 
 public class BoardingPassGenerator extends JFrame implements ActionListener {
 
-    JButton fetchUserDetails_jbutton;
+    JButton fetchUserDetails_jbutton, printBookingPass_jbutton;
     JLabel source_jlabel_, name_jlabel_, nationality_jlabel_, flightName_jlabel_, travelDate_jlabel_, destination_jlabel_, flightcode_jlabel_;
     JTextField pnr_number_jtextField;
 
@@ -118,6 +120,16 @@ public class BoardingPassGenerator extends JFrame implements ActionListener {
         add(travelDate_jlabel_);
 
 
+
+//        Do flight from source and destination exists
+        printBookingPass_jbutton = new JButton("PRINT");
+        printBookingPass_jbutton.setBounds(220, 350, 150, 25);
+        printBookingPass_jbutton.setBackground(Color.BLACK);
+        printBookingPass_jbutton.setForeground(Color.WHITE);
+        printBookingPass_jbutton.addActionListener(this); // EVENT LISTENER
+        add(printBookingPass_jbutton);
+
+
 //        setting the image
         ImageIcon unscaled_imageIcon = new ImageIcon(ClassLoader.getSystemResource("icons/airindia.png"));
         Image scaled_image = unscaled_imageIcon.getImage().getScaledInstance(300, 230, Image.SCALE_DEFAULT);
@@ -136,6 +148,7 @@ public class BoardingPassGenerator extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == fetchUserDetails_jbutton) {
             try {
                 String pnr = pnr_number_jtextField.getText();
 
@@ -159,6 +172,29 @@ public class BoardingPassGenerator extends JFrame implements ActionListener {
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
+        } else {
+            String pnr = pnr_number_jtextField.getText();
+
+            JTable jTable = new JTable();
+            try {
+//            DB Connection
+                DBConnection dbConnection = new DBConnection();
+//            SQL Query
+                String query = "SELECT * FROM bookticket WHERE PNR = '"+pnr+"'";
+//            Data from the DB
+                ResultSet resultSet = dbConnection.statement.executeQuery(query);
+
+//            adding the Data into the Table
+                jTable.setModel(DbUtils.resultSetToTableModel(resultSet));
+//                Print the Ticket[Booking Pass]
+                jTable.print();
+
+//                Close the window
+                setVisible(false);
+            } catch (Exception exception){
+                exception.printStackTrace();
+            }
+        }
     }
 
 
